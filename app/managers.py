@@ -22,7 +22,7 @@ class ActorManager(object):
         self.conn.commit()
 
     def all(self) -> List[Actor]:
-        query = ("SELECT (id, first_name, last_name)"
+        query = ("SELECT id, first_name, last_name"
                  " FROM {} "
                  "ORDER BY id"
                  ).format(self.table_name)
@@ -53,16 +53,16 @@ class ActorManager(object):
 
     def update(
             self,
-            actor_id: int,
-            first_name: str,
-            last_name: str
+            pk: int,
+            new_first_name: str,
+            new_last_name: str
     ) -> Optional[Actor]:
         query = ("UPDATE {} "
                  "SET first_name=?, last_name=?"
                  " WHERE id=?"
                  ).format(self.table_name)
         try:
-            self.cursor.execute(query, (first_name, last_name, actor_id))
+            self.cursor.execute(query, (new_first_name, new_last_name, pk))
             self.conn.commit()
         except sqlite3.Error as error:
             self.conn.rollback()
@@ -72,11 +72,11 @@ class ActorManager(object):
             return None
         else:
             return Actor(
-                id=actor_id,
-                first_name=first_name,
-                last_name=last_name
+                id=pk,
+                first_name=new_first_name,
+                last_name=new_last_name
             )
-    def delete(self, actor_id: int) -> None:
+    def delete(self, pk: int) -> None:
         query = ("DELETE FROM {} WHERE id=?").format(self.table_name)
-        self.cursor.execute(query, (actor_id,))
+        self.cursor.execute(query, (pk,))
         self.conn.commit()
