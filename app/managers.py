@@ -76,3 +76,7 @@ class ActorManager(object):
                 first_name=first_name,
                 last_name=last_name
             )
+    def delete(self, actor_id: int) -> None:
+        query = ("DELETE FROM {} WHERE id=?").format(self.table_name)
+        self.cursor.execute(query, (actor_id,))
+        self.conn.commit()
