@@ -76,6 +76,7 @@ class ActorManager(object):
                 first_name=new_first_name,
                 last_name=new_last_name
             )
+
     def delete(self, pk: int) -> None:
         query = ("DELETE FROM {} WHERE id=?").format(self.table_name)
         self.cursor.execute(query, (pk,))
